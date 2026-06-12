@@ -30,9 +30,21 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
+
+# local developer guide (personal setup notes)
+dev.md
 
 # vercel
 .vercel
+
+# sentry CLI (can contain auth tokens)
+.sentryclirc
+
+# cursor / local agent tooling
+.cursor/
+.agents/
+skills-lock.json
 
 # typescript
 *.tsbuildinfo

@@ -1,20 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-// Dummy AI logic for album recommendations based on community trends
-// In a real implementation, this would use ML models or external APIs
-const mockCommunityTrends = [
-  { album: 'Random Access Memories', artist: 'Daft Punk', score: 98 },
-  { album: 'To Pimp a Butterfly', artist: 'Kendrick Lamar', score: 95 },
-  { album: 'Blonde', artist: 'Frank Ocean', score: 93 },
-  { album: 'Currents', artist: 'Tame Impala', score: 91 },
-  { album: 'Melodrama', artist: 'Lorde', score: 89 },
-];
+import { getCachedRecommendationsByCookie } from "@/lib/cache/recommendations";
+import { isRecommendationsCacheValid } from "@/lib/recommendations/cache";
 
-export async function GET(req: NextRequest) {
-  // Optionally, parse user or community info from req
-  // For now, return top trending albums
-  return NextResponse.json({
-    recommendations: mockCommunityTrends,
-    source: 'ai-community-trends',
+export const runtime = "edge";
+
+const SESSION_COOKIE = "spotify_session";
+
+export async function GET(request: NextRequest) {
+  const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
+
+  if (sessionCookie) {
+    const cached = await getCachedRecommendationsByCookie(sessionCookie);
+    if (cached && isRecommendationsCacheValid(cached)) {
+      return NextResponse.json(
+        { ...cached, cached: true, stale: false, edge: true },
+        { headers: { "Cache-Control": "private, no-store" } }
+      );
+    }
+  }
+
+  const generateUrl = new URL("/api/recommend/generate", request.url);
+  generateUrl.search = request.nextUrl.search;
+
+  const response = await fetch(generateUrl.toString(), {
+    headers: {
+      cookie: request.headers.get("cookie") ?? "",
+    },
+  });
+
+  const body = await response.text();
+  return new NextResponse(body, {
+    status: response.status,
+    headers: {
+      "Content-Type": "application/json",
+      ...(response.headers.get("Retry-After")
+        ? { "Retry-After": response.headers.get("Retry-After")! }
+        : {}),
+    },
   });
 }

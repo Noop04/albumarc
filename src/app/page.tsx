@@ -1,30 +1,24 @@
+import { AlbumRecommendationsShell } from "@/components/album-recommendations-shell";
+import { SpotifyAttribution } from "@/components/spotify-attribution";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black">
-      <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-center space-y-8 text-center">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Albumarc
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-zinc-400">
-              Substack for album-first music discovery communities.
-            </p>
-          </div>
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
+        <header className="mb-12 text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Albumarc</h1>
+          <p className="mt-4 text-lg leading-8 text-zinc-400">
+            Personalized song discovery powered by your Spotify taste.
+          </p>
+          <p className="mt-2 text-sm text-zinc-500">
+            New songs you haven&apos;t heard — synced to your &quot;albumarc&quot; playlist.
+          </p>
+        </header>
 
-          <div className="mt-10 w-full max-w-lg">
-            <div className="overflow-hidden rounded-2xl bg-white/[0.05] shadow-xl ring-1 ring-white/[0.1]">
-              <div className="p-8">
-                <p className="text-sm text-zinc-400">
-                  Start building your app by editing{" "}
-                  <code className="rounded bg-white/[0.1] px-2 py-1 text-sm text-white">
-                    src/app/page.tsx
-                  </code>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <main>
+          <AlbumRecommendationsShell />
+          <SpotifyAttribution />
+        </main>
       </div>
     </div>
   );

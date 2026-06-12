@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Albumarc",
-  description: "Substack for album-first music discovery communities.",
+  description: "Personalized song discovery powered by Spotify.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
+      <head>
+        <link rel="preconnect" href="https://api.spotify.com" />
+        <link rel="preconnect" href="https://sdk.scdn.co" />
+        <link rel="preconnect" href="https://i.scdn.co" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
