@@ -210,7 +210,7 @@ export function AlbumRecommendations() {
         if (showLoading) setLoading(false);
       }
     },
-    [applyRecommendations, syncPlaylist, fetchAndStoreProfile]
+    [applyRecommendations, syncPlaylist]
   );
 
   const loadRecommendations = useCallback(async () => {

@@ -45,7 +45,8 @@ export async function fetchAndStoreProfile(): Promise<MusicProfile | null> {
     if (!response.ok) return null;
 
     const data = (await response.json()) as MusicProfile & { cached?: boolean };
-    const { cached: _cached, ...profile } = data;
+    const profile = { ...data };
+    delete profile.cached;
     const normalized = normalizeProfile(profile);
     saveStoredProfile(normalized);
     return normalized;
